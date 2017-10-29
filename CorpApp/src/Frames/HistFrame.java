@@ -130,7 +130,7 @@ public class HistFrame extends javax.swing.JFrame {
         } else if (tiempoRadioBtn.isSelected()) {
             new HistTiempoDialog(this,true).setVisible(true);
         }else if (plantaRadioBtn.isSelected()) {
-            //
+            new HistPlantaDialog(this,true).setVisible(true);
         }
     }//GEN-LAST:event_mostarBtnMouseClicked
 
