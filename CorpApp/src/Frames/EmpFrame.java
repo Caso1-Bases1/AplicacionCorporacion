@@ -9,12 +9,12 @@ package Frames;
  *
  * @author danielalvarado
  */
-public class HistFrame extends javax.swing.JFrame {
+public class EmpFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form HistFrame
      */
-    public HistFrame() {
+    public EmpFrame() {
         initComponents();
     }
 
@@ -29,30 +29,33 @@ public class HistFrame extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         empleadoRadioBtn = new javax.swing.JRadioButton();
-        tiempoRadioBtn = new javax.swing.JRadioButton();
         plantaRadioBtn = new javax.swing.JRadioButton();
+        totalesRadioBtn = new javax.swing.JRadioButton();
         mostarBtn = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        aguinaldosRadioBtn = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Historico");
 
         buttonGroup1.add(empleadoRadioBtn);
-        empleadoRadioBtn.setText("Por Empleado");
+        empleadoRadioBtn.setText("Top 10");
+        empleadoRadioBtn.setActionCommand("Top 10");
         empleadoRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 empleadoRadioBtnActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(tiempoRadioBtn);
-        tiempoRadioBtn.setText("Por Periodo de Tiempo");
-
         buttonGroup1.add(plantaRadioBtn);
-        plantaRadioBtn.setText("Por Planta");
-        plantaRadioBtn.addActionListener(new java.awt.event.ActionListener() {
+        plantaRadioBtn.setText("Por planta");
+
+        buttonGroup1.add(totalesRadioBtn);
+        totalesRadioBtn.setText("Totales");
+        totalesRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                plantaRadioBtnActionPerformed(evt);
+                totalesRadioBtnActionPerformed(evt);
             }
         });
 
@@ -70,6 +73,11 @@ public class HistFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Empleados");
+
+        buttonGroup1.add(aguinaldosRadioBtn);
+        aguinaldosRadioBtn.setText("Aguinaldos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -78,30 +86,41 @@ public class HistFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(aguinaldosRadioBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(mostarBtn))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tiempoRadioBtn)
-                            .addComponent(plantaRadioBtn, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(empleadoRadioBtn, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE)
-                        .addComponent(mostarBtn)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(89, 89, 89)
+                                .addComponent(jLabel1))
+                            .addComponent(totalesRadioBtn)
+                            .addComponent(empleadoRadioBtn)
+                            .addComponent(plantaRadioBtn))
+                        .addGap(0, 118, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(empleadoRadioBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tiempoRadioBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(plantaRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(totalesRadioBtn)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mostarBtn)
-                    .addComponent(plantaRadioBtn)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(mostarBtn))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(aguinaldosRadioBtn))))
         );
 
         pack();
@@ -111,9 +130,9 @@ public class HistFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_empleadoRadioBtnActionPerformed
 
-    private void plantaRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plantaRadioBtnActionPerformed
+    private void totalesRadioBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalesRadioBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_plantaRadioBtnActionPerformed
+    }//GEN-LAST:event_totalesRadioBtnActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
@@ -123,14 +142,20 @@ public class HistFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void mostarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mostarBtnMouseClicked
-        System.out.println("ASFASFASF00");
+        
         // TODO add your handling code here:
         if (empleadoRadioBtn.isSelected()) {
-            new HistEmpleadoDialog(this,true).setVisible(true);
-        } else if (tiempoRadioBtn.isSelected()) {
-            new HistTiempoDialog(this,true).setVisible(true);
-        }else if (plantaRadioBtn.isSelected()) {
+            //Top 10
+            new EmpTiempoDialog(this,true).setVisible(true);
+        } else if (plantaRadioBtn.isSelected()) {
+            //Por planta
+            new EmpPlantaDialog(this,true).setVisible(true);
+        }else if (totalesRadioBtn.isSelected()) {
+            //Totales
             new HistPlantaDialog(this,true).setVisible(true);
+        }else if (aguinaldosRadioBtn.isSelected()) {
+            //Aguinaldos
+            new EmpleadoAguinaldoDialog(this,true).setVisible(true);
         }
     }//GEN-LAST:event_mostarBtnMouseClicked
 
@@ -164,17 +189,19 @@ public class HistFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HistFrame().setVisible(true);
+                new EmpFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton aguinaldosRadioBtn;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JRadioButton empleadoRadioBtn;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JToggleButton mostarBtn;
     private javax.swing.JRadioButton plantaRadioBtn;
-    private javax.swing.JRadioButton tiempoRadioBtn;
+    private javax.swing.JRadioButton totalesRadioBtn;
     // End of variables declaration//GEN-END:variables
 }

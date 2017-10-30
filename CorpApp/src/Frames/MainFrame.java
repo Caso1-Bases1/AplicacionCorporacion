@@ -27,28 +27,46 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        historicButton = new javax.swing.JButton();
+        employeesButton = new javax.swing.JButton();
+        pagoPlanillasButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Corporation App");
 
-        jButton1.setText("Historico de Planillas");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+        historicButton.setText("Historico de Planillas");
+        historicButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton1MouseClicked(evt);
+                historicButtonMouseClicked(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        historicButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                historicButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Empleados");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        employeesButton.setText("Empleados");
+        employeesButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                employeesButtonMouseClicked(evt);
+            }
+        });
+        employeesButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                employeesButtonActionPerformed(evt);
+            }
+        });
+
+        pagoPlanillasButton.setText("Pagho de planillas");
+        pagoPlanillasButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pagoPlanillasButtonMouseClicked(evt);
+            }
+        });
+        pagoPlanillasButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pagoPlanillasButtonActionPerformed(evt);
             }
         });
 
@@ -60,40 +78,62 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(101, 101, 101)
-                        .addComponent(jButton1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pagoPlanillasButton)
+                            .addComponent(historicButton)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(135, 135, 135)
-                        .addComponent(jButton2)))
+                        .addGap(125, 125, 125)
+                        .addComponent(employeesButton)))
                 .addContainerGap(122, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(50, 50, 50)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap(180, Short.MAX_VALUE))
+                .addComponent(historicButton)
+                .addGap(18, 18, 18)
+                .addComponent(employeesButton)
+                .addGap(27, 27, 27)
+                .addComponent(pagoPlanillasButton)
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void historicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historicButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_historicButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void employeesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeesButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_employeesButtonActionPerformed
 
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+    private void historicButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_historicButtonMouseClicked
 
         // TODO add your handling code here:
        new HistFrame().setVisible(true);
        this.setVisible(false);
        dispose();
-    }//GEN-LAST:event_jButton1MouseClicked
+    }//GEN-LAST:event_historicButtonMouseClicked
+
+    private void pagoPlanillasButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagoPlanillasButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pagoPlanillasButtonActionPerformed
+
+    private void employeesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_employeesButtonMouseClicked
+        // TODO add your handling code here:
+       new EmpFrame().setVisible(true);
+       this.setVisible(false);
+       dispose();
+    }//GEN-LAST:event_employeesButtonMouseClicked
+
+    private void pagoPlanillasButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pagoPlanillasButtonMouseClicked
+        // TODO add your handling code here:
+       new PagosPlanillasDialog(this, true).setVisible(true);
+       this.setVisible(false);
+       dispose();
+    }//GEN-LAST:event_pagoPlanillasButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -131,7 +171,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton employeesButton;
+    private javax.swing.JButton historicButton;
+    private javax.swing.JButton pagoPlanillasButton;
     // End of variables declaration//GEN-END:variables
 }
