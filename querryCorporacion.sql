@@ -7,7 +7,7 @@ WHERE DATEDIFF(MONTH, a.anno_pagado, SYSDATETIME()) <= 12
 GROUP BY e.codigo_empleado, a.aguinaldo_empleado
 
 -- Funcion
-CREATE FUNCTION [dbo].[aguinaldo] ( @id int)
+CREATE FUNCTION [dbo].[obtenerAguinaldo] ( @id int)
 RETURNS float(10)
 AS
 BEGIN 
@@ -20,6 +20,8 @@ FROM( SELECT a.aguinaldo_empleado
 			@id = e.codigo_empleado)
 		GROUP BY e.codigo_empleado, a.aguinaldo_empleado) Tabla
 RETURN @result END
+
+-- SELECT [dbo].[obtenerAguinaldo] (1)
 
 -- 2. Monto total pagado en salarios por un periodo de tiempo
 
@@ -43,6 +45,8 @@ FROM( SELECT SUM(cp.salario_bruto) "Monto_Total"
 		WHERE hp.fecha_generada BETWEEN @fechaInicio AND @fechaFinal) Tabla
 RETURN @result END
 
+-- SELECT [dbo].[totalSalarios] ()
+
 -- 3. Monto total en netos y obligaciones en un periodo de tiempo
 
 SELECT SUM(cp.salario_neto) "Total_Neto", (SUM(cp.salario_bruto) * 0.917) "Total_Obligaciones"
@@ -53,17 +57,17 @@ WHERE hp.fecha_generada BETWEEN @fechaInicio AND @fechaFinal
 
 -- Funcion
 CREATE FUNCTION [dbo].[totalNetoObligaciones] ( @fechaInicio date, @fechaFinal date)
-RETURNS float(10), float(10)
+RETURNS TABLE
 AS
-BEGIN 
-DECLARE @result1 float(10), @result2 float(10)
-SELECT @result1 = Tabla.Total_Neto, @result2 = Tabla.Total_Obligaciones
-FROM( SELECT SUM(cp.salario_neto) "Total_Neto", (SUM(cp.salario_bruto) * 0.917) "Total_Obligaciones"
-		FROM EMPLEADO e
-		inner join CONTENIDO_PLANILLA cp on e.codigo_empleado = cp.codigo_empleado
-		inner join HISTORICO_PLANILLA hp on cp.id_planilla = hp.id_planilla
-		WHERE hp.fecha_generada BETWEEN @fechaInicio AND @fechaFinal) Tabla
-RETURN @result1, @result2 END
+RETURN (
+SELECT SUM(cp.salario_neto) "Total_Neto", (SUM(cp.salario_bruto) * 0.917) "Total_Obligaciones"
+FROM EMPLEADO e
+inner join CONTENIDO_PLANILLA cp on e.codigo_empleado = cp.codigo_empleado
+inner join HISTORICO_PLANILLA hp on cp.id_planilla = hp.id_planilla
+WHERE hp.fecha_generada BETWEEN @fechaInicio AND @fechaFinal);
+
+-- SELECT [dbo].[totalNetoObligaciones] ()
+
 
 -- 4. Lista de los 10 empleados mejor pagados en un periodo de tiempo
 
@@ -81,9 +85,12 @@ RETURN (
 SELECT TOP 10 e.nombre, SUM(cp.salario_neto) "Salario Total"
 FROM EMPLEADO e
 inner join CONTENIDO_PLANILLA cp on e.codigo_empleado = cp.codigo_empleado
+inner join HISTORICO_PLANILLA hp on cp.Id_Planilla = hp.Id_Planilla
 WHERE hp.fecha_generada BETWEEN @fechaInicio AND @fechaFinal
 GROUP BY e.nombre); 
 GO
+
+-- Select [dbo].[top10Empleados] ()
 
 -- 5. Planta, cantidad de empleados, monto total de salarios brutos pagados,
 -- promedio de salarios brutos. Puede ser ordenado por 
@@ -113,7 +120,7 @@ BEGIN
 IF @orden = 1
 BEGIN
 RETURN (
-SELECT p.id_planta, COUNT(e.codigo_empleado) "Total Empleados",
+SELECT TOP * p.id_planta, COUNT(e.codigo_empleado) "Total Empleados",
 SUM(cp.salario_bruto) "Total salarios brutos", AVG(cp.salario_bruto) "Promedio salarios brutos"
 FROM PLANTA p
 inner join HISTORICO_PLANILLA hp on p.id_planta = hp.id_planta
@@ -125,7 +132,7 @@ END
 IF @orden = 2
 BEGIN
 RETURN (
-SELECT p.id_planta, COUNT(e.codigo_empleado) "Total Empleados",
+SELECT TOP * p.id_planta, COUNT(e.codigo_empleado) "Total Empleados",
 SUM(cp.salario_bruto) "Total salarios brutos", AVG(cp.salario_bruto) "Promedio salarios brutos"
 FROM PLANTA p
 inner join HISTORICO_PLANILLA hp on p.id_planta = hp.id_planta
@@ -137,7 +144,7 @@ END
 IF @orden = 3
 BEGIN
 RETURN (
-SELECT p.id_planta, COUNT(e.codigo_empleado) "Total Empleados",
+SELECT TOP all p.id_planta, COUNT(e.codigo_empleado) "Total Empleados",
 SUM(cp.salario_bruto) "Total salarios brutos", AVG(cp.salario_bruto) "Promedio salarios brutos"
 FROM PLANTA p
 inner join HISTORICO_PLANILLA hp on p.id_planta = hp.id_planta
@@ -164,4 +171,5 @@ FROM EMPLEADO e
 inner join CONTENIDO_PLANILLA cp on e.codigo_empleado = cp.codigo_empleado
 WHERE @id = e.codigo_empleado
 GROUP BY e.nombre, cp.salario_neto);
-GO
+
+-- SELECT [dbo].[historicoEmpleado] ()
