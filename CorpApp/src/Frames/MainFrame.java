@@ -166,6 +166,13 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
+                util.DBConnection BD = new util.DBConnection();
+                
+                BD.connect();
+                util.Query newQuery = new util.Query();
+                newQuery.getEmployeeName(20);
+                
+                
             }
         });
     }
