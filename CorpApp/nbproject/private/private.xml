@@ -4,10 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/Frames/MainFrame.java</file>
+            <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/Frames/EmpAscDialog.java</file>
             <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/util/DBConnection.java</file>
-            <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/Frames/EmpleadoAguinaldoDialog.java</file>
             <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/util/Query.java</file>
-            <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/util/PlantInfo.java</file>
+            <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/Frames/HistEmpleadoDialog.java</file>
+            <file>file:/C:/Users/CASA/Desktop/AplicacionCorporacion/CorpApp/src/Frames/EmpPlantaDialog.java</file>
         </group>
     </open-files>
 </project-private>

@@ -10,6 +10,9 @@ package Frames;
  * @author danielalvarado
  */
 public class MainFrame extends javax.swing.JFrame {
+    public static util.DBConnection BD = new util.DBConnection();
+                
+    public static util.Query newQuery = new util.Query();
 
     /**
      * Creates new form MainFrame
@@ -17,6 +20,14 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
     }
+    
+    public static util.DBConnection getBD(){
+        return BD;
+    } 
+    public static util.Query getQueryObject(){
+        return newQuery;
+    } 
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,28 +85,25 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pagoPlanillasButton)
-                            .addComponent(historicButton)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(employeesButton)))
-                .addContainerGap(122, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(118, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(historicButton, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(employeesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pagoPlanillasButton, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(105, 105, 105))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
+                .addGap(75, 75, 75)
                 .addComponent(historicButton)
                 .addGap(18, 18, 18)
                 .addComponent(employeesButton)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(pagoPlanillasButton)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         pack();
@@ -166,11 +174,9 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
-                util.DBConnection BD = new util.DBConnection();
-                
                 BD.connect();
-                util.Query newQuery = new util.Query();
-                newQuery.getEmployeeName(20);
+                
+                //newQuery.getEmployeeName(20);
                 
                 
             }

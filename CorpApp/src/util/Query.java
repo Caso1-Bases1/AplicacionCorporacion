@@ -24,6 +24,11 @@ public class Query {
         public static String GET_EMPLOYEE_NAME = "{? = call getEmpleadoName(?)}";
         public static String GET_NET_TOTAL_OBLIGATION = 
                     "{all totalNetoObligaciones(?, ?)}";
+        public static String GET_TOP10_EMPLOYEE = "{? = call callTop10Empleados(?,?)}";
+        public static String GET_ASC_INFO = "{call infoPlantas3}";
+        public static String GET_DESC_INFO = "{call infoPlantas2}";
+        public static String GET_BY_PLANT_INFO = "{call infoPlantas1}";
+        public static String GET_EMPLOYEE_HISTORIC = "{? = call historicoEmpleado(?)}";
        
         private Connection connection;
         
@@ -63,29 +68,26 @@ public class Query {
          * @param finalD Final Date, Date
          * @return returns the amount (float) paid, given by SQL function
          */
-        public float getTotalSalary(Date inicialD, Date finalD) {
+        public ResultSet getTotalSalary(String _id) {
             connection = DBConnection.getInstance().connect();
-            String iniD = convertDateToString(inicialD);
-            String finD = convertDateToString(finalD);
-            
-           
             CallableStatement statement;
-            float result = -1;
+            ResultSet result = null;
             try {
-                statement = connection.prepareCall(GET_TOTAL_SALARY);
-                statement.registerOutParameter(1, Types.FLOAT);
-                statement.setDate(2, convertUtilToSql(inicialD));
-                statement.setDate(3, convertUtilToSql(finalD));
-                statement.execute();
+                statement = connection.prepareCall(GET_EMPLOYEE_HISTORIC);
+                statement.setString(2,_id);
+                statement.registerOutParameter(1, java.sql.Types.OTHER);  
+                //statement.execute();   
+
+                result = statement.executeQuery();
+               
                 
-               result = statement.getFloat(1);
                 
             } catch (SQLException | NullPointerException e) {
                 System.err.println("No se pudo realizar la consulta"); 
                 System.err.println(e.getMessage());
 
             } finally {
-		DBConnection.getInstance().disconnect();
+		//DBConnection.getInstance().disconnect();
 		}
             return result;
         }
@@ -99,6 +101,7 @@ public class Query {
                 statement.setDate(1, convertUtilToSql(iniD));
                 statement.setDate(2, convertUtilToSql(finD));
                 ResultSet rs = statement.executeQuery();
+                
       
                 //print a header row
                 result += "\nTotalNeto\t|\tTotalObligaciones \t";
@@ -152,16 +155,48 @@ public class Query {
             
         }
         
-        public String getTop10Employees(Date iniD, Date finD) {
+        public String getTotalSalaryName(int id){
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement;
+            String result = "";
+            try {
+                
+                statement = connection.prepareCall(GET_EMPLOYEE_NAME);
+               
+                
+                 statement.setString(2,Integer.toString(id));
+                statement.registerOutParameter(1, java.sql.Types.NVARCHAR);  
+                statement.execute();   
+
+                result = statement.getString(1);
+                System.out.println("El nombre del empleado es: " + result);
+                
+                
+      
+
+                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta"); 
+                System.err.println(e.getMessage());
+
+            } finally {
+		DBConnection.getInstance().disconnect();
+		}
+            return result;
+            
+        }
+        
+        public String getTop10Employees(java.util.Date iniD, java.util.Date finD) {
             connection = DBConnection.getInstance().connect();
             CallableStatement statement;
             String result = "";
             try {
                 statement = connection.prepareCall(GET_TOP10_EMPLOYEE);
-                statement.setDate(1, convertUtilToSql(iniD));
-                statement.setDate(2, convertUtilToSql(finD));
+                statement.registerOutParameter(1, java.sql.Types.OTHER);
+                statement.setDate(2, convertUtilToSql(iniD));
+                statement.setDate(3, convertUtilToSql(finD));
                 ResultSet rs = statement.executeQuery();
-      
+
                 //print a header row
                 result += "\nNombreEmpleado\t|\tSalario Total";
                 result += "----------------------\t|\t----------------\t";
@@ -174,7 +209,7 @@ public class Query {
                 } 
                 
             } catch (SQLException | NullPointerException e) {
-                System.err.println("No se pudo realizar la consulta"); 
+                System.err.println("No se pudo realizar la consultaAA"); 
                 System.err.println(e.getMessage());
 
             } finally {
@@ -183,10 +218,11 @@ public class Query {
             return result;
         }
         
-        public String getPlantInfo(PlantInfo _type) {
+        public ResultSet getPlantInfo(PlantInfo _type) {
             connection = DBConnection.getInstance().connect();
             CallableStatement statement = null;
             String result = "";
+            ResultSet rs=null;
             try {
                 switch (_type) {
                     case ASCENDANT:
@@ -200,8 +236,8 @@ public class Query {
                         break;
                 }
                 
-                ResultSet rs = statement.executeQuery();
-      
+                rs = statement.executeQuery();
+                /*
                 //print a header row
                 result += "\nidPlanta\t|\tTotal Empleados\t|\tTotal salarios brutos\t|\tPromedio salarios brutos";
                 result += "----------------------\t|\t----------------\t";
@@ -213,16 +249,18 @@ public class Query {
                     String totalSB = rs.getString("Total salarios brutos");
                     String sbAvg = rs.getString("Promedio salarios brutos");
                     result += "\n" + idplant + "\t|\t" + totalEmplyee + "\t|\t" + totalSB + "\t|\t" +sbAvg ;
-                } 
+                } */
                 
             } catch (SQLException | NullPointerException e) {
-                System.err.println("No se pudo realizar la consulta"); 
+                System.err.println("No se pudo realizar la consulta :("); 
                 System.err.println(e.getMessage());
 
             } finally {
-		DBConnection.getInstance().disconnect();
+		//DBConnection.getInstance().disconnect();
 		}
-            return result;
+            //return result;
+            //System.out.println(result);
+            return rs;
         }
         
         

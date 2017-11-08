@@ -29,27 +29,28 @@ public class EmpFrame extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         empleadoRadioBtn = new javax.swing.JRadioButton();
-        plantaRadioBtn = new javax.swing.JRadioButton();
+        descRadioBTN = new javax.swing.JRadioButton();
         totalesRadioBtn = new javax.swing.JRadioButton();
         mostarBtn = new javax.swing.JToggleButton();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         aguinaldosRadioBtn = new javax.swing.JRadioButton();
+        ascRadioBTN = new javax.swing.JRadioButton();
+        plantaRadioBtn = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Historico");
 
         buttonGroup1.add(empleadoRadioBtn);
         empleadoRadioBtn.setText("Top 10");
-        empleadoRadioBtn.setActionCommand("Top 10");
         empleadoRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 empleadoRadioBtnActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(plantaRadioBtn);
-        plantaRadioBtn.setText("Por planta");
+        buttonGroup1.add(descRadioBTN);
+        descRadioBTN.setText("Por cantidad de empleados descendente");
 
         buttonGroup1.add(totalesRadioBtn);
         totalesRadioBtn.setText("Totales");
@@ -78,6 +79,12 @@ public class EmpFrame extends javax.swing.JFrame {
         buttonGroup1.add(aguinaldosRadioBtn);
         aguinaldosRadioBtn.setText("Aguinaldos");
 
+        buttonGroup1.add(ascRadioBTN);
+        ascRadioBTN.setText("Por cantidad de empleados ascendente");
+
+        buttonGroup1.add(plantaRadioBtn);
+        plantaRadioBtn.setText("Por planta");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,14 +98,18 @@ public class EmpFrame extends javax.swing.JFrame {
                         .addComponent(mostarBtn))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(empleadoRadioBtn)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(89, 89, 89)
                                 .addComponent(jLabel1))
+                            .addComponent(plantaRadioBtn)
                             .addComponent(totalesRadioBtn)
-                            .addComponent(empleadoRadioBtn)
-                            .addComponent(plantaRadioBtn))
-                        .addGap(0, 118, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(ascRadioBTN)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(descRadioBTN)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -108,19 +119,21 @@ public class EmpFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addComponent(empleadoRadioBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(empleadoRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(plantaRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ascRadioBTN)
+                    .addComponent(descRadioBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(totalesRadioBtn)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(mostarBtn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(aguinaldosRadioBtn))))
+                    .addComponent(aguinaldosRadioBtn)))
         );
 
         pack();
@@ -150,6 +163,18 @@ public class EmpFrame extends javax.swing.JFrame {
         } else if (plantaRadioBtn.isSelected()) {
             //Por planta
             new EmpPlantaDialog(this,true).setVisible(true);
+        } else if (ascRadioBTN.isSelected()) {
+            //Por empleado ascendente
+            EmpAscDialog nuevo =
+            new EmpAscDialog(this,true);
+            nuevo.setTypeOfTable(1);
+            nuevo.setVisible(true);
+        } else if (descRadioBTN.isSelected()) {
+            //Por empleado descendente
+            EmpDescDialog nuevo =
+            new EmpDescDialog(this,true);
+            nuevo.setTypeOfTable(2);
+            nuevo.setVisible(true);
         }else if (totalesRadioBtn.isSelected()) {
             //Totales
             new HistPlantaDialog(this,true).setVisible(true);
@@ -196,7 +221,9 @@ public class EmpFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton aguinaldosRadioBtn;
+    private javax.swing.JRadioButton ascRadioBTN;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JRadioButton descRadioBTN;
     private javax.swing.JRadioButton empleadoRadioBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
