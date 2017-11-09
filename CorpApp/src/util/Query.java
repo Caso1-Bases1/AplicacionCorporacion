@@ -23,13 +23,19 @@ public class Query {
         public static String GET_TOTAL_SALARY = "{? = call totalSalarios(?, ?)}";
         public static String GET_EMPLOYEE_NAME = "{? = call getEmpleadoName(?)}";
         public static String GET_NET_TOTAL_OBLIGATION = 
-                    "{all totalNetoObligaciones(?, ?)}";
+                    "{call totalNetoObligaciones(?, ?)}";
         public static String GET_TOP10_EMPLOYEE = "{? = call callTop10Empleados(?,?)}";
         public static String GET_ASC_INFO = "{call infoPlantas3}";
         public static String GET_DESC_INFO = "{call infoPlantas2}";
         public static String GET_BY_PLANT_INFO = "{call infoPlantas1}";
         public static String GET_EMPLOYEE_HISTORIC = "{? = call historicoEmpleado(?)}";
-       
+        public static String HISTORIC_EMPLOYEE = "{call historicoEmpleado(?)}";
+        public static String GET_PLANTS_IDS = "{call getIdPlants}";
+        public static String HISTORIC_PLANT = "{call historicoPlanta(?)}";
+        public static String QUERY_PLANILLA = "{call getPlanillasSinPagar}";
+        
+                
+        
         private Connection connection;
         
         public Query() {}
@@ -92,19 +98,20 @@ public class Query {
             return result;
         }
         
-        public String getTotalOblig(Date iniD, Date finD) {
+        public ResultSet getTotalOblig(java.util.Date iniD, java.util.Date finD) {
             connection = DBConnection.getInstance().connect();
             CallableStatement statement;
             String result = "";
+            ResultSet rs = null;
             try {
                 statement = connection.prepareCall(GET_NET_TOTAL_OBLIGATION);
                 statement.setDate(1, convertUtilToSql(iniD));
                 statement.setDate(2, convertUtilToSql(finD));
-                ResultSet rs = statement.executeQuery();
+                rs = statement.executeQuery();
                 
       
                 //print a header row
-                result += "\nTotalNeto\t|\tTotalObligaciones \t";
+                /*result += "\nTotalNeto\t|\tTotalObligaciones \t";
                 result += "----------------------\t|\t----------------\t";
       
                 //loop through the result set and call method to print the result set row
@@ -112,18 +119,69 @@ public class Query {
                     String TotalNet= rs.getString("Total_Neto");
                     String TotalOblg= rs.getString("Total_Obligaciones");
                     result += "\n" + TotalNet + "\t|\t" + TotalOblg + "\t|\t";
-                } 
+                } */
                 
             } catch (SQLException | NullPointerException e) {
                 System.err.println("No se pudo realizar la consulta"); 
                 System.err.println(e.getMessage());
 
             } finally {
-		DBConnection.getInstance().disconnect();
+		//DBConnection.getInstance().disconnect();
 		}
-            return result;
+            return rs;
+        }
+        public ResultSet getHistEmployee(int _idEmployee) {
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement = null;
+            String result = "";
+            ResultSet rs = null;
+            try {
+                statement = connection.prepareCall(HISTORIC_EMPLOYEE);
+                statement.setInt(1, _idEmployee);
+                rs = statement.executeQuery();
+                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta :("); 
+                System.err.println(e.getMessage());
+            }        
+            return rs;
+        
         }
         
+        public ResultSet getHistPlant(int _idPlant) {
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement = null;
+            String result = "";
+            ResultSet rs = null;
+            try {
+                statement = connection.prepareCall(HISTORIC_PLANT);
+                statement.setInt(1, _idPlant);
+                rs = statement.executeQuery();
+                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta :("); 
+                System.err.println(e.getMessage());
+            }        
+            return rs;
+        
+        }
+        public ResultSet getPlants(){
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement = null;
+            String result = "";
+            ResultSet rs = null;
+            try {
+                statement = connection.prepareCall(GET_PLANTS_IDS);
+                //statement.setInt(1, _idEmployee);
+                rs = statement.executeQuery();
+                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta :("); 
+                System.err.println(e.getMessage());
+            }        
+            return rs;
+            
+        }
         public String getEmployeeName(int id){
             connection = DBConnection.getInstance().connect();
             CallableStatement statement;
@@ -186,19 +244,20 @@ public class Query {
             
         }
         
-        public String getTop10Employees(java.util.Date iniD, java.util.Date finD) {
+        public ResultSet getTop10Employees(java.util.Date iniD, java.util.Date finD) {
             connection = DBConnection.getInstance().connect();
             CallableStatement statement;
             String result = "";
+            ResultSet rs = null;
             try {
                 statement = connection.prepareCall(GET_TOP10_EMPLOYEE);
                 statement.registerOutParameter(1, java.sql.Types.OTHER);
                 statement.setDate(2, convertUtilToSql(iniD));
                 statement.setDate(3, convertUtilToSql(finD));
-                ResultSet rs = statement.executeQuery();
+                rs = statement.executeQuery();
 
                 //print a header row
-                result += "\nNombreEmpleado\t|\tSalario Total";
+                /*result += "\nNombreEmpleado\t|\tSalario Total";
                 result += "----------------------\t|\t----------------\t";
       
                 //loop through the result set and call method to print the result set row
@@ -206,16 +265,43 @@ public class Query {
                     String name= rs.getString("nombre");
                     String total_salary= rs.getString("Salario Total");
                     result += "\n" + name + "\t|\t" + total_salary;
-                } 
+                } */
                 
             } catch (SQLException | NullPointerException e) {
                 System.err.println("No se pudo realizar la consultaAA"); 
                 System.err.println(e.getMessage());
 
             } finally {
-		DBConnection.getInstance().disconnect();
+		//DBConnection.getInstance().disconnect();
 		}
-            return result;
+            return rs;
+        }
+        
+        public ResultSet getPlanillas() {
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement = null;
+            String result = "";
+            ResultSet rs=null;
+            
+            
+            
+            
+            try {
+                statement = connection.prepareCall(QUERY_PLANILLA);
+                rs = statement.executeQuery();
+                
+
+                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta :c"); 
+                System.err.println(e.getMessage());
+
+            } finally {
+		//DBConnection.getInstance().disconnect();
+		}
+            //return result;
+            //System.out.println(result);
+            return rs;
         }
         
         public ResultSet getPlantInfo(PlantInfo _type) {
