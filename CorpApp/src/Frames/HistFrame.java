@@ -123,7 +123,7 @@ public class HistFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void mostarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mostarBtnMouseClicked
-        System.out.println("ASFASFASF00");
+
         // TODO add your handling code here:
         if (empleadoRadioBtn.isSelected()) {
             new HistEmpleadoDialog(this,true).setVisible(true);

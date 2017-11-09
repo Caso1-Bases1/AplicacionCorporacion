@@ -5,6 +5,14 @@
  */
 package Frames;
 
+import static Frames.EmpPlantaDialog.buildTableModel;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
+import util.PlantInfo;
+
 /**
  *
  * @author danielalvarado
@@ -30,22 +38,17 @@ public class EmpTiempoDialog extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        top10TextBOX = new javax.swing.JTextArea();
         fechaUnoTop10 = new com.toedter.calendar.JDateChooser();
         fechaDosTop10 = new com.toedter.calendar.JDateChooser();
         top10BTN = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        top10TABLE = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Fecha Inicial");
 
         jLabel2.setText("Fecha Final");
-
-        top10TextBOX.setEditable(false);
-        top10TextBOX.setColumns(20);
-        top10TextBOX.setRows(5);
-        jScrollPane1.setViewportView(top10TextBOX);
 
         top10BTN.setText("Aceptar");
         top10BTN.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -54,30 +57,37 @@ public class EmpTiempoDialog extends javax.swing.JDialog {
             }
         });
 
+        top10TABLE.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(top10TABLE);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(top10BTN)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(84, 84, 84)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(fechaUnoTop10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(fechaDosTop10, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel1)
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(top10BTN)))
-                .addContainerGap(44, Short.MAX_VALUE))
+                        .addComponent(fechaUnoTop10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(106, 106, 106)
+                        .addComponent(fechaDosTop10, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,24 +100,71 @@ public class EmpTiempoDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(fechaUnoTop10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fechaDosTop10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(top10BTN)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public static DefaultTableModel buildTableModel(ResultSet rs)
+        throws SQLException {
+       
+        ResultSetMetaData metaData = rs.getMetaData();
 
+        // names of columns
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
+        }
+        
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+
+        while (rs.next()) {
+            //System.out.println("Jjeje");
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                vector.add(rs.getObject(columnIndex));
+            }
+            data.add(vector);
+        }
+
+        return new DefaultTableModel(data, columnNames);
+
+    }
+
+    
     private void top10BTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_top10BTNMouseClicked
         // TODO add your handling code here:
         java.util.Date finicio = (fechaUnoTop10.getDate());
         java.util.Date ffinal = (fechaDosTop10.getDate());
         
-        String top10String = Frames.MainFrame.getQueryObject().getTop10Employees(finicio, ffinal);
         
-        top10TextBOX.setText(top10String);
+                
+        
+        //top10TextBOX.setText(top10String);
+        ResultSet rs =
+           Frames.MainFrame.getQueryObject().getTop10Employees(finicio, ffinal);
+        
+        
+        //FillTable(empPlantaTABLE);
+        try{
+           top10TABLE.setModel(buildTableModel(rs));
+           
+           //System.out.println(rs.getMetaData().getColumnName(0));
+        }
+        catch(Exception e){
+            System.out.println("Nop");
+            System.err.println(e.getMessage());
+        }
+        finally{
+            util.DBConnection.getInstance().disconnect();
+        }
         
         
     }//GEN-LAST:event_top10BTNMouseClicked
@@ -162,8 +219,8 @@ public class EmpTiempoDialog extends javax.swing.JDialog {
     private com.toedter.calendar.JDateChooser fechaUnoTop10;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton top10BTN;
-    private javax.swing.JTextArea top10TextBOX;
+    private javax.swing.JTable top10TABLE;
     // End of variables declaration//GEN-END:variables
 }

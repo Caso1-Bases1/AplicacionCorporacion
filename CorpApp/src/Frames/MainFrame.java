@@ -69,7 +69,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        pagoPlanillasButton.setText("Pagho de planillas");
+        pagoPlanillasButton.setText("Pago de planillas");
         pagoPlanillasButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pagoPlanillasButtonMouseClicked(evt);
@@ -86,13 +86,12 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(historicButton, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(employeesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pagoPlanillasButton, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(105, 105, 105))
+                    .addComponent(pagoPlanillasButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(employeesButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(historicButton, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -139,6 +138,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void pagoPlanillasButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pagoPlanillasButtonMouseClicked
         // TODO add your handling code here:
        new PagosPlanillasDialog(this, true).setVisible(true);
+       //new PagosPlanillasDialog().setVisible(true);
        this.setVisible(false);
        dispose();
     }//GEN-LAST:event_pagoPlanillasButtonMouseClicked

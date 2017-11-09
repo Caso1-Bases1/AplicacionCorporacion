@@ -124,9 +124,7 @@ public class EmpAscDialog extends javax.swing.JDialog {
 
     }
     private void fillTable(){
-        //System.out.println(Type);
-        
-            System.out.println("KOKOKOKOKOKO");     
+           
             ResultSet rs = MainFrame.getQueryObject().getPlantInfo(PlantInfo.ASCENDANT);
 
             try{

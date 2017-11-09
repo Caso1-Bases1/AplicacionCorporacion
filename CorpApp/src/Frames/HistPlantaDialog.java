@@ -5,6 +5,15 @@
  */
 package Frames;
 
+import static Frames.EmpPlantaDialog.buildTableModel;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import util.PlantInfo;
+
 /**
  *
  * @author danielalvarado
@@ -17,6 +26,58 @@ public class HistPlantaDialog extends javax.swing.JDialog {
     public HistPlantaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        fillPlantas();
+    }
+    
+    public static Vector<String> buildComboBoxModel(ResultSet rs)
+        throws SQLException {
+       
+        ResultSetMetaData metaData = rs.getMetaData();
+
+        // names of columns
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
+        }
+        
+        // data of the table
+        Vector<String> data = new Vector<String>();
+
+        while (rs.next()) {
+            //System.out.println("Jjeje");
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                //vector.add(rs.getObject(columnIndex));
+                data.add(rs.getString(columnIndex));
+            }
+            //data.add(vector);
+        }
+        System.out.println(data);
+        return data;
+
+    }
+    public void fillPlantas(){
+        
+        //histPlantasCmbBOX;
+        ResultSet rs = MainFrame.getQueryObject().getPlants();
+        
+        
+        //FillTable(empPlantaTABLE);
+        try{
+           //empPlantaTABLE.setModel(buildTableModel(rs));
+           histPlantasCmbBOX.setModel
+        (new DefaultComboBoxModel(buildComboBoxModel(rs).toArray()));
+           //buildComboBoxModel(rs);
+           //System.out.println(rs.getMetaData().getColumnName(0));
+        }
+        catch(Exception e){
+            System.out.println("Nop");
+            System.err.println(e.getMessage());
+        }
+        finally{
+            util.DBConnection.getInstance().disconnect();
+        }
     }
 
     /**
@@ -29,33 +90,49 @@ public class HistPlantaDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        histPlantasCmbBOX = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        histPlantaTABLE = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ID Planta: ");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        histPlantasCmbBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        histPlantasCmbBOX.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                histPlantasCmbBOXActionPerformed(evt);
+            }
+        });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        histPlantaTABLE.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(histPlantaTABLE);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                        .addComponent(histPlantasCmbBOX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -63,14 +140,37 @@ public class HistPlantaDialog extends javax.swing.JDialog {
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                    .addComponent(histPlantasCmbBOX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void histPlantasCmbBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_histPlantasCmbBOXActionPerformed
+        // TODO add your handling code here:
+        int id = Integer.parseInt(histPlantasCmbBOX.getSelectedItem().toString());
+        System.out.println(id);
+        ResultSet rs = MainFrame.getQueryObject().getHistPlant(id);
+        
+        
+        //FillTable(empPlantaTABLE);
+        try{
+           histPlantaTABLE.setModel(buildTableModel(rs));
+           
+           //System.out.println(rs.getMetaData().getColumnName(0));
+        }
+        catch(Exception e){
+            System.out.println("Nop");
+            System.err.println(e.getMessage());
+        }
+        finally{
+            util.DBConnection.getInstance().disconnect();
+        }
+        
+    }//GEN-LAST:event_histPlantasCmbBOXActionPerformed
 
     /**
      * @param args the command line arguments
@@ -115,9 +215,9 @@ public class HistPlantaDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JTable histPlantaTABLE;
+    private javax.swing.JComboBox<String> histPlantasCmbBOX;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }
