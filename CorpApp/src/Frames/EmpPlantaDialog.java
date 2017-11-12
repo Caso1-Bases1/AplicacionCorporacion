@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import util.PlantInfo;
@@ -25,6 +26,7 @@ public class EmpPlantaDialog extends javax.swing.JDialog {
     public EmpPlantaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        fillPlantas();
     }
 
     /**
@@ -45,7 +47,7 @@ public class EmpPlantaDialog extends javax.swing.JDialog {
 
         jLabel1.setText("ID Planta: ");
 
-        plantaCmbBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        plantaCmbBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Holas" }));
         plantaCmbBOX.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 plantaCmbBOXActionPerformed(evt);
@@ -122,6 +124,57 @@ public class EmpPlantaDialog extends javax.swing.JDialog {
 
     }
 
+    public static Vector<String> buildComboBoxModel(ResultSet rs)
+        throws SQLException {
+       
+        ResultSetMetaData metaData = rs.getMetaData();
+
+        // names of columns
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
+        }
+        
+        // data of the table
+        Vector<String> data = new Vector<String>();
+
+        while (rs.next()) {
+            //System.out.println("Jjeje");
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                //vector.add(rs.getObject(columnIndex));
+                data.add(rs.getString(columnIndex));
+            }
+            //data.add(vector);
+        }
+        System.out.println(data);
+        return data;
+
+    }
+    public void fillPlantas(){
+        
+        //histPlantasCmbBOX;
+        ResultSet rs = MainFrame.getQueryObject().getPlants();
+        
+        
+        //FillTable(empPlantaTABLE);
+        try{
+           //empPlantaTABLE.setModel(buildTableModel(rs));
+           plantaCmbBOX.setModel
+        (new DefaultComboBoxModel(buildComboBoxModel(rs).toArray()));
+           //buildComboBoxModel(rs);
+           //System.out.println(rs.getMetaData().getColumnName(0));
+        }
+        catch(Exception e){
+            System.out.println("Nop");
+            System.err.println(e.getMessage());
+        }
+        finally{
+            util.DBConnection.getInstance().disconnect();
+        }
+    }
+    
     private void plantaCmbBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plantaCmbBOXActionPerformed
         // TODO add your handling code here:
         

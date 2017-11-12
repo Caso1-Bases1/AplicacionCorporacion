@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
  */
 public class Query {
     	public static String GET_BONUS = "{? = call obtenerAguinaldo(?)}";
-        public static String GET_TOTAL_SALARY = "{? = call totalSalarios(?, ?)}";
+        public static String GET_TOTAL_SALARY = "{call totalSalarios(?, ?)}";
         public static String GET_EMPLOYEE_NAME = "{? = call getEmpleadoName(?)}";
         public static String GET_NET_TOTAL_OBLIGATION = 
                     "{call totalNetoObligaciones(?, ?)}";
@@ -33,7 +33,7 @@ public class Query {
         public static String GET_PLANTS_IDS = "{call getIdPlants}";
         public static String HISTORIC_PLANT = "{call historicoPlanta(?)}";
         public static String QUERY_PLANILLA = "{call getPlanillasSinPagar}";
-        
+        public static String UPDATE_PLANILLA = "{call pagarPlanilla(?)}";
                 
         
         private Connection connection;
@@ -98,7 +98,7 @@ public class Query {
             return result;
         }
         
-        public ResultSet getTotalOblig(java.util.Date iniD, java.util.Date finD) {
+        public ResultSet getNetTotalOblig(java.util.Date iniD, java.util.Date finD) {
             connection = DBConnection.getInstance().connect();
             CallableStatement statement;
             String result = "";
@@ -108,19 +108,29 @@ public class Query {
                 statement.setDate(1, convertUtilToSql(iniD));
                 statement.setDate(2, convertUtilToSql(finD));
                 rs = statement.executeQuery();
+              
                 
-      
-                //print a header row
-                /*result += "\nTotalNeto\t|\tTotalObligaciones \t";
-                result += "----------------------\t|\t----------------\t";
-      
-                //loop through the result set and call method to print the result set row
-                while (rs.next()){
-                    String TotalNet= rs.getString("Total_Neto");
-                    String TotalOblg= rs.getString("Total_Obligaciones");
-                    result += "\n" + TotalNet + "\t|\t" + TotalOblg + "\t|\t";
-                } */
-                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta"); 
+                System.err.println(e.getMessage());
+
+            } finally {
+		//DBConnection.getInstance().disconnect();
+		}
+            return rs;
+        }
+        
+        public ResultSet getTotalOblig(java.util.Date iniD, java.util.Date finD) {
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement;
+            String result = "";
+            ResultSet rs = null;
+            try {
+                statement = connection.prepareCall(GET_TOTAL_SALARY);
+                statement.setDate(1, convertUtilToSql(iniD));
+                statement.setDate(2, convertUtilToSql(finD));
+                rs = statement.executeQuery();
+ 
             } catch (SQLException | NullPointerException e) {
                 System.err.println("No se pudo realizar la consulta"); 
                 System.err.println(e.getMessage());
@@ -349,6 +359,26 @@ public class Query {
             return rs;
         }
         
+        public  void updatePlanillas(int _idPlanilla) {
+            connection = DBConnection.getInstance().connect();
+            CallableStatement statement;
+            try {
+                
+                statement = connection.prepareCall(UPDATE_PLANILLA);
+               
+                
+                statement.setInt(1, _idPlanilla);
+                statement.execute();   
+                
+            } catch (SQLException | NullPointerException e) {
+                System.err.println("No se pudo realizar la consulta"); 
+                System.err.println(e.getMessage());
+
+            } finally {
+		DBConnection.getInstance().disconnect();
+		}
+            
+        }
         
         private static String convertDateToString(java.util.Date uDate) {
             java.sql.Date sDate = new java.sql.Date(uDate.getTime());

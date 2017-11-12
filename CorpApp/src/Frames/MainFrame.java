@@ -5,6 +5,9 @@
  */
 package Frames;
 
+import java.io.File;
+import printer.PDFprinter;
+
 /**
  *
  * @author danielalvarado
@@ -174,6 +177,8 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
+                
+                
                 BD.connect();
                 
                 //newQuery.getEmployeeName(20);

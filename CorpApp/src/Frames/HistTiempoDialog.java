@@ -35,10 +35,13 @@ public class HistTiempoDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        salariosTotalesRdioBTN = new javax.swing.JRadioButton();
+        salariosNetosRdioBTN = new javax.swing.JRadioButton();
         fechaInicio = new com.toedter.calendar.JDateChooser();
         fechaFinal = new com.toedter.calendar.JDateChooser();
         aceptarHistTiempoBTN = new javax.swing.JButton();
@@ -51,9 +54,11 @@ public class HistTiempoDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Fecha Final");
 
-        jRadioButton1.setText("Salarios Totales");
+        buttonGroup1.add(salariosTotalesRdioBTN);
+        salariosTotalesRdioBTN.setText("Salarios Totales");
 
-        jRadioButton2.setText("Salarios Netos");
+        buttonGroup1.add(salariosNetosRdioBTN);
+        salariosNetosRdioBTN.setText("Salarios Netos");
 
         aceptarHistTiempoBTN.setText("Aceptar");
         aceptarHistTiempoBTN.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -85,20 +90,20 @@ public class HistTiempoDialog extends javax.swing.JDialog {
                     .addComponent(aceptarHistTiempoBTN)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton1)
+                            .addComponent(salariosTotalesRdioBTN)
                             .addComponent(jLabel1))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jRadioButton2))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(42, 42, 42)
-                                .addComponent(jLabel2))))
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(salariosNetosRdioBTN))))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(fechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(54, 54, 54)
-                        .addComponent(fechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(fechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -113,9 +118,9 @@ public class HistTiempoDialog extends javax.swing.JDialog {
                     .addComponent(fechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(salariosNetosRdioBTN)
+                    .addComponent(salariosTotalesRdioBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -156,8 +161,8 @@ public class HistTiempoDialog extends javax.swing.JDialog {
     
     private void aceptarHistTiempoBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aceptarHistTiempoBTNMouseClicked
         // TODO add your handling code here:
-       
-        ResultSet rs = 
+       if (salariosTotalesRdioBTN.isSelected()){
+           ResultSet rs = 
                 MainFrame.getQueryObject().
                         getTotalOblig(fechaInicio.getDate(),fechaFinal.getDate());
 
@@ -171,6 +176,24 @@ public class HistTiempoDialog extends javax.swing.JDialog {
             finally{
                 util.DBConnection.getInstance().disconnect();
             }
+       }
+       else if (salariosNetosRdioBTN.isSelected()){
+           ResultSet rs = 
+                MainFrame.getQueryObject().
+                        getNetTotalOblig(fechaInicio.getDate(),fechaFinal.getDate());
+
+            try{
+               histTiempoTABLE.setModel(EmpPlantaDialog.buildTableModel(rs));
+            }
+            catch(Exception e){
+                //System.out.println("Nop");
+                System.err.println(e.getMessage());
+            }
+            finally{
+                util.DBConnection.getInstance().disconnect();
+            }
+       }
+        
     }//GEN-LAST:event_aceptarHistTiempoBTNMouseClicked
 
     /**
@@ -217,13 +240,16 @@ public class HistTiempoDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptarHistTiempoBTN;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
     private com.toedter.calendar.JDateChooser fechaFinal;
     private com.toedter.calendar.JDateChooser fechaInicio;
     private javax.swing.JTable histTiempoTABLE;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JRadioButton salariosNetosRdioBTN;
+    private javax.swing.JRadioButton salariosTotalesRdioBTN;
     // End of variables declaration//GEN-END:variables
 }

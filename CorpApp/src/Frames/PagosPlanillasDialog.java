@@ -6,12 +6,22 @@
 package Frames;
 
 import static Frames.EmpAscDialog.Type;
+import com.itextpdf.text.DocumentException;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import printer.PDFprinter;
 import util.PlantInfo;
+import util.Query ;
 
 /**
  *
@@ -40,10 +50,12 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        pagarBTN = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePlanillas = new javax.swing.JTable();
         backPagosBTN = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        plaNumTextEdit = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -53,10 +65,15 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
 
         jLabel2.setText("Pago pendientes:");
 
-        jButton1.setText("Pagar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        pagarBTN.setText("Pagar");
+        pagarBTN.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pagarBTNMouseClicked(evt);
+            }
+        });
+        pagarBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                pagarBTNActionPerformed(evt);
             }
         });
 
@@ -80,6 +97,8 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel3.setText("Numero de Planilla");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,10 +114,17 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(262, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(plaNumTextEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(pagarBTN)))
                 .addGap(42, 42, 42))
         );
         layout.setVerticalGroup(
@@ -116,16 +142,19 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pagarBTN)
+                    .addComponent(jLabel3)
+                    .addComponent(plaNumTextEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void pagarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagarBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_pagarBTNActionPerformed
 
     private void backPagosBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backPagosBTNMouseClicked
         // TODO add your handling code here:
@@ -133,6 +162,87 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
         this.setVisible(false);
         dispose();
     }//GEN-LAST:event_backPagosBTNMouseClicked
+    
+    private JTable getSelectedTable(JTable tabla, int selectedPlanilla){
+        
+        JTable tablaResultado = new JTable();
+
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = tabla.getColumnCount();
+        for (int column = 0; column < columnCount; column++) {
+            columnNames.add(tabla.getColumnName(column));
+        }
+        
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        //Vector<String> data = new Vector<String>();
+        
+        int size = 0;
+        
+        while (size < tabla.getRowCount()) {
+            //System.out.println("Jjeje");
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                if ((int)tabla.getValueAt(size, 0) == selectedPlanilla){
+                    vector.add(tabla.getValueAt(size, columnIndex));
+                }
+            }
+            size++;
+            data.add(vector);
+        }
+        
+        tablaResultado.setModel(new DefaultTableModel(data, columnNames));
+        return tablaResultado;
+        //return new DefaultTableModel(data, columnNames);
+        
+        
+    }
+    private void pagarBTNMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pagarBTNMouseClicked
+        // TODO add your handling code here:
+        boolean continue_flag = false;
+        try {   
+            int imprimir = JOptionPane.showConfirmDialog(null, 
+                    "¿Desea imprimir la factura?");
+            
+            if (imprimir == JOptionPane.YES_OPTION){
+                int selectedPlanilla = Integer.valueOf(plaNumTextEdit.getText());
+                
+                //Frames.MainFrame.getQueryObject().updatePlanillas(selectedPlanilla);
+                
+                continue_flag = true;
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Date        date = new Date();
+            
+                PDFprinter generatePDFFileIText = new PDFprinter();
+                
+                //getSelectedTable(jTablePlanillas,selectedPlanilla);
+                generatePDFFileIText.createPDF(new File("GeneratePDFFileIText.pdf"),getSelectedTable(jTablePlanillas,selectedPlanilla));
+                //generatePDFFileIText.createPDF(new File("factura" + dateFormat.format(date) + ".pdf"), jTablePlanillas, selectedPlanilla);
+                //jTablePlanillas.get
+            }
+            else{}
+       
+        }catch (Exception e) {
+            System.err.println(e);
+        }
+        /*
+        if (continue_flag) {
+            ResultSet rs = MainFrame.getQueryObject().getPlanillas();
+            try{
+               jTablePlanillas.setModel(EmpPlantaDialog.buildTableModel(rs));
+               revalidate();
+              repaint();
+            }
+            catch(Exception e){
+                System.err.println(e.getMessage());
+            }
+            finally{
+                util.DBConnection.getInstance().disconnect();
+                
+            }
+        }*/
+        
+    }//GEN-LAST:event_pagarBTNMouseClicked
 
     /**
      * @param args the command line arguments
@@ -225,11 +335,13 @@ public class PagosPlanillasDialog extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backPagosBTN;
-    private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTablePlanillas;
+    private javax.swing.JButton pagarBTN;
+    private javax.swing.JTextField plaNumTextEdit;
     // End of variables declaration//GEN-END:variables
 }

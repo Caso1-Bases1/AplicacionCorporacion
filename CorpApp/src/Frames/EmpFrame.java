@@ -36,7 +36,6 @@ public class EmpFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         aguinaldosRadioBtn = new javax.swing.JRadioButton();
         ascRadioBTN = new javax.swing.JRadioButton();
-        plantaRadioBtn = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Historico");
@@ -53,7 +52,7 @@ public class EmpFrame extends javax.swing.JFrame {
         descRadioBTN.setText("Por cantidad de empleados descendente");
 
         buttonGroup1.add(totalesRadioBtn);
-        totalesRadioBtn.setText("Totales");
+        totalesRadioBtn.setText("Empleados totales por planta");
         totalesRadioBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 totalesRadioBtnActionPerformed(evt);
@@ -82,9 +81,6 @@ public class EmpFrame extends javax.swing.JFrame {
         buttonGroup1.add(ascRadioBTN);
         ascRadioBTN.setText("Por cantidad de empleados ascendente");
 
-        buttonGroup1.add(plantaRadioBtn);
-        plantaRadioBtn.setText("Por planta");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,13 +99,10 @@ public class EmpFrame extends javax.swing.JFrame {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(89, 89, 89)
                                 .addComponent(jLabel1))
-                            .addComponent(plantaRadioBtn)
                             .addComponent(totalesRadioBtn)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ascRadioBTN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(descRadioBTN)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(ascRadioBTN)
+                            .addComponent(descRadioBTN))
+                        .addGap(0, 44, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -121,22 +114,20 @@ public class EmpFrame extends javax.swing.JFrame {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(empleadoRadioBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addComponent(plantaRadioBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ascRadioBTN)
-                    .addComponent(descRadioBTN))
+                .addComponent(ascRadioBTN)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(descRadioBTN)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(totalesRadioBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(42, 42, 42)
+                        .addGap(0, 21, Short.MAX_VALUE)
                         .addComponent(mostarBtn))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(totalesRadioBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(aguinaldosRadioBtn)
-                        .addContainerGap())))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         pack();
@@ -163,9 +154,9 @@ public class EmpFrame extends javax.swing.JFrame {
         if (empleadoRadioBtn.isSelected()) {
             //Top 10
             new EmpTiempoDialog(this,true).setVisible(true);
-        } else if (plantaRadioBtn.isSelected()) {
+        //} else if (plantaRadioBtn.isSelected()) {
             //Por planta
-            new EmpPlantaDialog(this,true).setVisible(true);
+          //  new EmpPlantaDialog(this,true).setVisible(true);
         } else if (ascRadioBTN.isSelected()) {
             //Por empleado ascendente
             EmpAscDialog nuevo =
@@ -231,7 +222,6 @@ public class EmpFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JToggleButton mostarBtn;
-    private javax.swing.JRadioButton plantaRadioBtn;
     private javax.swing.JRadioButton totalesRadioBtn;
     // End of variables declaration//GEN-END:variables
 }
